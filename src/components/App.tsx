@@ -1,4 +1,5 @@
 import { useEffect, useState, FormEvent } from "react";
+import axios from "axios";
 import Recipe from "./Recipe";
 import { ResponseType } from "../types/types.module";
 
@@ -16,7 +17,6 @@ const App = () => {
   const request = `https://api.edamam.com/api/recipes/v2?type=any&q=${query}&app_id=${APP_ID}&app_key=${API_KEY}`;
 
   useEffect(() => {
-    console.log("effect");
     if (query.length !== 0) {
       console.log(`Searching for ${query}`);
       getResponse();
@@ -26,11 +26,10 @@ const App = () => {
   const getResponse = async () => {
     try {
       setLoading(true);
-      const response = await fetch(request);
-      const data = await response.json();
-      setRecipes(data.hits);
-      data.hits.length === 0 ? setEmpty(true) : setEmpty(false);
-    } catch (err: any) {
+      const response = await axios.get(request);
+      setRecipes(response.data.hits);
+      response.data.hits.length === 0 ? setEmpty(true) : setEmpty(false);
+    } catch (err) {
       setLoading(false);
       console.error(err);
     } finally {
