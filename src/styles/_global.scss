@@ -1,0 +1,7 @@
+$black: #2d081a;
+
+@mixin grid-center($min-height: 100svh) {
+  display: grid;
+  place-items: center;
+  min-height: $min-height;
+}
