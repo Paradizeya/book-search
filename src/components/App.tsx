@@ -2,8 +2,7 @@ import { useState, FormEvent } from "react";
 import axios from "axios";
 import Recipe from "./Recipe";
 import { ResponseType } from "../types/types.module";
-import { useMutation, useQuery } from "react-query";
-import { isQueryKey } from "react-query/types/core/utils";
+import { useQuery } from "react-query";
 
 const APP_ID = import.meta.env.VITE_APP_ID;
 const API_KEY = import.meta.env.VITE_API_KEY;
