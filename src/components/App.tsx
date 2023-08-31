@@ -27,11 +27,12 @@ const App = () => {
     try {
       setLoading(true);
       const response = await axios.get(request);
+      console.log(response);
       setRecipes(response.data.hits);
       response.data.hits.length === 0 ? setEmpty(true) : setEmpty(false);
     } catch (err) {
       setLoading(false);
-      console.error(err);
+      console.error("something went wrong");
     } finally {
       setLoading(false);
     }

@@ -20,7 +20,6 @@ body {
   .root {
     width: 100%;
     @include grid-center(90svh);
-    gap: 1rem;
     align-items: start;
     grid-template-rows: repeat(2, minmax(0px, auto)) 1fr;
     padding: 1rem;
@@ -29,7 +28,6 @@ body {
       display: flex;
       justify-content: center;
       align-items: stretch;
-      padding: 1rem;
       &__input {
         width: 100%;
         border-radius: 10px 0px 0px 10px;
@@ -54,6 +52,9 @@ body {
           background-color: lighten($color: $black, $amount: 30%);
         }
       }
+    }
+    .msg-block {
+      padding: 1rem;
     }
     .recipes {
       display: grid;
