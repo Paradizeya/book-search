@@ -8,7 +8,7 @@ const APP_ID = import.meta.env.VITE_APP_ID;
 const API_KEY = import.meta.env.VITE_API_KEY;
 
 const getResponse = async (filter: string) => {
-  const request = `https://api.edamam.com/api/recipes/v2?type=any&q=${filter}&app_id=${APP_ID}&app_key=${API_KEY}`;
+  const request = `https://api.edamam.com/api/recipes/v2?type=any&q=${filter}&random=true&app_id=${APP_ID}&app_key=${API_KEY}`;
   const { data } = await axios.get(request);
   console.log(`Searching for ${filter}`);
   console.log(data);
