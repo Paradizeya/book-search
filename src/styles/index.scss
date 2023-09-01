@@ -28,7 +28,6 @@ body {
       display: flex;
       justify-content: center;
       align-items: stretch;
-      padding: 1rem;
       &__input {
         width: 100%;
         border-radius: 10px 0px 0px 10px;
@@ -53,6 +52,9 @@ body {
           background-color: lighten($color: $black, $amount: 30%);
         }
       }
+    }
+    .msg-block {
+      padding: 1rem;
     }
     .recipes {
       display: grid;

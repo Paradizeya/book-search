@@ -1,47 +1,37 @@
-import { useEffect, useState, FormEvent } from "react";
+import { useState, FormEvent } from "react";
+import axios from "axios";
 import Recipe from "./Recipe";
 import { ResponseType } from "../types/types.module";
+import { useQuery } from "react-query";
+
+const APP_ID = import.meta.env.VITE_APP_ID;
+const API_KEY = import.meta.env.VITE_API_KEY;
+
+const getResponse = async (filter: string) => {
+  const request = `https://api.edamam.com/api/recipes/v2?type=any&q=${filter}&app_id=${APP_ID}&app_key=${API_KEY}`;
+  const { data } = await axios.get(request);
+  console.log(`Searching for ${filter}`);
+  console.log(data);
+  return data;
+};
 
 const App = () => {
-  const APP_ID = import.meta.env.VITE_APP_ID;
-  const API_KEY = import.meta.env.VITE_API_KEY;
-
   const [search, setSearch] = useState(""); //what to search
-  const [query, setQuery] = useState(""); //start search
-  const [recipes, setRecipes] = useState([]); //store result
+  const [filter, setFilter] = useState("chicken"); //start search
 
-  const [loading, setLoading] = useState(false); //is fetching?
-  const [empty, setEmpty] = useState(false); //did fetch give empty resp? Initial false since no fetch request was made
-
-  const request = `https://api.edamam.com/api/recipes/v2?type=any&q=${query}&app_id=${APP_ID}&app_key=${API_KEY}`;
-
-  useEffect(() => {
-    console.log("effect");
-    if (query.length !== 0) {
-      console.log(`Searching for ${query}`);
-      getResponse();
+  const { data, isLoading, isError } = useQuery(
+    filter,
+    () => getResponse(filter),
+    {
+      refetchOnWindowFocus: false,
     }
-  }, [query]);
-
-  const getResponse = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch(request);
-      const data = await response.json();
-      setRecipes(data.hits);
-      data.hits.length === 0 ? setEmpty(true) : setEmpty(false);
-    } catch (err: any) {
-      setLoading(false);
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  );
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     if (!search.trim()) return;
     e.preventDefault();
-    setQuery(search);
+    setFilter(search);
+    console.log(filter);
     setSearch("");
   };
 
@@ -62,20 +52,22 @@ const App = () => {
         </button>
       </form>
       <div className="msg-block">
-        {loading && <p>Searching for {query}...</p>}
-        {!loading && empty && <p>No search results for {query}.</p>}
+        {isLoading && <p>Searching for {filter}...</p>}
+        {!isLoading && isError && <p>No search results for {filter}.</p>}
       </div>
-      <div className="recipes">
-        {recipes.map((item: ResponseType) => {
-          return (
-            <Recipe
-              key={item.recipe.uri}
-              title={item.recipe.label}
-              image={item.recipe.image}
-            />
-          );
-        })}
-      </div>
+      {data && (
+        <div className="recipes">
+          {data.hits.map((item: ResponseType) => {
+            return (
+              <Recipe
+                key={item.recipe.uri}
+                title={item.recipe.label}
+                image={item.recipe.image}
+              />
+            );
+          })}
+        </div>
+      )}
     </>
   );
 };
