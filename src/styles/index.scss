@@ -51,17 +51,21 @@ body {
         &:active {
           background-color: lighten($color: $black, $amount: 30%);
         }
+        &[disabled] {
+          background-color: gray;
+          cursor: wait;
+        }
       }
     }
     .msg-block {
       padding: 1rem;
     }
-    .recipes {
+    .items {
       display: grid;
       gap: 1rem;
       width: 100%;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      .recipe {
+      .item {
         display: flex;
         padding: 10px;
         gap: 10px;
