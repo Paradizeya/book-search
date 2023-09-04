@@ -1,72 +1,79 @@
-export interface ResponseType {
-  recipe: {
-    uri: string;
-    label: string;
-    image: string;
-    images: {
-      THUMBNAIL: {
-        url: string;
-        width: number;
-        height: number;
-      };
-      SMALL: {
-        url: string;
-        width: number;
-        height: number;
-      };
-      REGULAR: {
-        url: string;
-        width: number;
-        height: number;
-      };
-      LARGE: {
-        url: string;
-        width: number;
-        height: number;
-      };
-    };
-    source: string;
-    url: string;
-    shareAs: string;
-    yield: number;
-    dietLabels: string[];
-    healthLabels: string[];
-    cautions: string[];
-    ingredientLines: string[];
-    ingredients: Ingredient[];
-    calories: number;
-    glycemicIndex: number;
-    totalCO2Emissions: number;
-    co2EmissionsClass: string;
-    totalWeight: number;
-    cuisineType: string[];
-    mealType: string[];
-    dishType: string[];
-    instructions: string[];
-    tags: string[];
-    externalId: string;
-    totalNutrients: object;
-    totalDaily: object;
-    digest: Digest[];
-  };
-}
-
-export interface Ingredient {
-  text: string;
-  quantity: number;
-  measure: string;
-  food: string;
-  weight: number;
-  foodId: string;
-}
-
-interface Digest {
-  label: string;
-  tag: string;
-  schemaOrgTag: string;
-  total: number;
-  hasRDI: boolean;
-  daily: number;
-  unit: string;
-  sub: object;
+export interface Book {
+  already_read_count: number;
+  author_alternative_name: string[];
+  author_facet: string[];
+  author_key: string[];
+  author_name: string[];
+  contributor: string[];
+  cover_edition_key: string;
+  cover_i: number;
+  currently_reading_count: number;
+  ddc: string[];
+  ddc_sort: string;
+  ebook_access: string;
+  ebook_count_i: number;
+  edition_count: number;
+  edition_key: string[];
+  first_publish_year: number;
+  has_fulltext: boolean;
+  ia: string[];
+  ia_box_id: string[];
+  ia_collection: string[];
+  ia_collection_s: string;
+  ia_loaded_id: string[];
+  id_alibris_id: string[];
+  id_amazon: string[];
+  id_canadian_national_library_archive: string[];
+  id_depósito_legal: string[];
+  id_goodreads: string[];
+  id_google: string[];
+  id_librarything: string[];
+  id_overdrive: string[];
+  id_paperback_swap: string[];
+  id_wikidata: string[];
+  isbn: string[];
+  key: string;
+  language: string[];
+  last_modified_i: number;
+  lcc: string[];
+  lcc_sort: string;
+  lccn: string[];
+  lending_edition_s: string;
+  lending_identifier_s: string;
+  number_of_pages_median: number;
+  oclc: string[];
+  person: string[];
+  person_facet: string[];
+  person_key: string[];
+  place: string[];
+  place_facet: string[];
+  place_key: string[];
+  printdisabled_s: string;
+  public_scan_b: boolean;
+  publish_date: string[];
+  publish_place: string[];
+  publish_year: number[];
+  publisher: string[];
+  publisher_facet: string[];
+  ratings_average: number;
+  ratings_count: number;
+  ratings_count_1: number;
+  ratings_count_2: number;
+  ratings_count_3: number;
+  ratings_count_4: number;
+  ratings_count_5: number;
+  ratings_sortable: number;
+  readinglog_count: number;
+  seed: string[];
+  subject: string[];
+  subject_facet: string[];
+  subject_key: string[];
+  time: string[];
+  time_facet: string[];
+  time_key: string[];
+  title: string;
+  title_sort: string;
+  title_suggest: string;
+  type: string;
+  want_to_read_count: number;
 }

@@ -35,33 +35,21 @@ body {
         padding-left: 5px;
       }
       &__button {
-        background-color: $black;
-        border-radius: 0px 10px 10px 0px;
-        color: #fff;
-        font-size: 15px;
-        padding: 10px 45px;
-        border: none;
-        cursor: pointer;
+        @include button();
         transition: 0.3s;
-        @media (hover: hover) {
-          &:hover {
-            background-color: lighten($color: $black, $amount: 30%);
-          }
-        }
-        &:active {
-          background-color: lighten($color: $black, $amount: 30%);
-        }
+        border-radius: 0px 10px 10px 0px;
+        @include button_interaction();
       }
     }
     .msg-block {
       padding: 1rem;
     }
-    .recipes {
+    .items {
       display: grid;
       gap: 1rem;
       width: 100%;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      .recipe {
+      .item {
         display: flex;
         padding: 10px;
         gap: 10px;
@@ -77,6 +65,15 @@ body {
         &__img {
           max-width: 200px;
         }
+      }
+    }
+    .load-more {
+      padding-top: 1rem;
+      &__button {
+        @include button();
+        transition: 0.3s;
+        border-radius: 10px;
+        @include button_interaction();
       }
     }
   }

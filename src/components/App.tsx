@@ -1,37 +1,44 @@
-import { useState, FormEvent } from "react";
-import axios from "axios";
-import Recipe from "./Recipe";
-import { ResponseType } from "../types/types.module";
-import { useQuery } from "react-query";
-
-const APP_ID = import.meta.env.VITE_APP_ID;
-const API_KEY = import.meta.env.VITE_API_KEY;
-
-const getResponse = async (filter: string) => {
-  const request = `https://api.edamam.com/api/recipes/v2?type=any&q=${filter}&app_id=${APP_ID}&app_key=${API_KEY}`;
-  const { data } = await axios.get(request);
-  console.log(`Searching for ${filter}`);
-  console.log(data);
-  return data;
-};
+import { useState, FormEvent, useRef, useEffect } from "react";
+import Item from "./Item";
+import { Book } from "../types/types.module";
+import useItemSearch from "./useItemSearch";
+import { useInfiniteQuery } from "react-query";
 
 const App = () => {
-  const [search, setSearch] = useState(""); //what to search
-  const [filter, setFilter] = useState("chicken"); //start search
+  const [search, setSearch] = useState(""); //sort of a debouns
+  const [filter, setFilter] = useState(""); //query
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(21);
+  let pagesCache = useRef(new Map());
 
-  const { data, isLoading, isError } = useQuery(
-    filter,
-    () => getResponse(filter),
-    {
-      refetchOnWindowFocus: false,
-    }
-  );
+  useEffect(() => {
+    window.innerWidth <= 1204 ? setLimit(20) : setLimit(21);
+  }, []);
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const {
+    data,
+    isLoading,
+    isError,
+    refetch,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery(filter, () => useItemSearch(filter, page, limit), {
+    enabled: false,
+    getNextPageParam: (prevData) => prevData.nextPage,
+    refetchOnWindowFocus: false,
+  });
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     if (!search.trim()) return;
     e.preventDefault();
-    setFilter(search);
-    console.log(filter);
+    await setFilter(search);
+    if (await pagesCache.current.has(search)) {
+      await setPage(pagesCache.current.get(search));
+    } else {
+      await setPage(1);
+    }
+    await refetch({ refetchPage: (index) => index === page });
     setSearch("");
   };
 
@@ -43,31 +50,62 @@ const App = () => {
           type="text"
           value={search}
           onChange={(e) => {
-            setSearch(e.target.value);
+            setSearch(e.target.value.toLowerCase());
           }}
-          placeholder="Type something like soup or banana!"
+          placeholder="What are you looking for today?"
         />
-        <button className="search-form__button" type="submit">
+        <button
+          disabled={isLoading}
+          className="search-form__button"
+          type="submit"
+        >
           Search
         </button>
       </form>
       <div className="msg-block">
         {isLoading && <p>Searching for {filter}...</p>}
-        {!isLoading && isError && <p>No search results for {filter}.</p>}
+        {!isLoading && isError && <p>Something went wrong.</p>}
+        {typeof data !== "undefined" ? (
+          data.pages[0].data.numFound === 0 ? (
+            <p>No results for {filter}.</p>
+          ) : (
+            <p>
+              Found {data.pages[0].data.numFound} results for <i>{filter}</i>.
+            </p>
+          )
+        ) : null}
       </div>
-      {data && (
-        <div className="recipes">
-          {data.hits.map((item: ResponseType) => {
-            return (
-              <Recipe
-                key={item.recipe.uri}
-                title={item.recipe.label}
-                image={item.recipe.image}
-              />
-            );
+
+      {typeof data !== "undefined" && (
+        <div className="items">
+          {data.pages.map((p) => {
+            return p.data.docs.map((item: Book) => {
+              return (
+                <Item
+                  key={item.key}
+                  title={item.title}
+                  cover_i={item.cover_i}
+                />
+              );
+            });
           })}
         </div>
       )}
+      <div className="load-more">
+        {hasNextPage && (
+          <button
+            className="load-more__button"
+            disabled={isFetchingNextPage}
+            onClick={async () => {
+              await setPage((prevPage) => prevPage + 1);
+              await fetchNextPage();
+              await pagesCache.current.set(filter, page + 1);
+            }}
+          >
+            {isFetchingNextPage ? "Loading..." : "Load more"}
+          </button>
+        )}
+      </div>
     </>
   );
 };
