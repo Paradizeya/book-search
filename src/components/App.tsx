@@ -1,6 +1,6 @@
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useRef } from "react";
 import Item from "./Item";
-//import { ResponseType } from "../types/types.module";
+import { Book } from "../types/types.module";
 import useItemSearch from "./useItemSearch";
 import { useInfiniteQuery } from "react-query";
 
@@ -8,7 +8,8 @@ const App = () => {
   const [search, setSearch] = useState(""); //sort of a debouns
   const [filter, setFilter] = useState(""); //query
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(1);
+  const [limit, setLimit] = useState(21);
+  let pagesCache = useRef(new Map());
 
   const {
     data,
@@ -28,8 +29,12 @@ const App = () => {
     if (!search.trim()) return;
     e.preventDefault();
     await setFilter(search);
-    await setPage(1);
-    await refetch();
+    if (await pagesCache.current.has(search)) {
+      await setPage(pagesCache.current.get(search));
+    } else {
+      await setPage(1);
+    }
+    await refetch({ refetchPage: (index) => index === page });
     setSearch("");
   };
 
@@ -41,7 +46,7 @@ const App = () => {
           type="text"
           value={search}
           onChange={(e) => {
-            setSearch(e.target.value);
+            setSearch(e.target.value.toLowerCase());
           }}
           placeholder="What are you looking for today?"
         />
@@ -70,8 +75,14 @@ const App = () => {
       {typeof data !== "undefined" && (
         <div className="items">
           {data.pages.map((p) => {
-            return p.data.docs.map((item: any) => {
-              return <Item key={item.key} title={item.title} />;
+            return p.data.docs.map((item: Book) => {
+              return (
+                <Item
+                  key={item.key}
+                  title={item.title}
+                  cover_i={item.cover_i}
+                />
+              );
             });
           })}
         </div>
@@ -83,6 +94,7 @@ const App = () => {
           onClick={async () => {
             await setPage((prevPage) => prevPage + 1);
             await fetchNextPage();
+            await pagesCache.current.set(filter, page + 1);
           }}
         >
           {isFetchingNextPage ? "Loading..." : "Load more"}
