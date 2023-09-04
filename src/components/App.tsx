@@ -1,4 +1,4 @@
-import { useState, FormEvent, useRef } from "react";
+import { useState, FormEvent, useRef, useEffect } from "react";
 import Item from "./Item";
 import { Book } from "../types/types.module";
 import useItemSearch from "./useItemSearch";
@@ -10,6 +10,10 @@ const App = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(21);
   let pagesCache = useRef(new Map());
+
+  useEffect(() => {
+    window.innerWidth <= 1204 ? setLimit(20) : setLimit(21);
+  }, []);
 
   const {
     data,
@@ -87,19 +91,21 @@ const App = () => {
           })}
         </div>
       )}
-
-      {hasNextPage && (
-        <button
-          disabled={isFetchingNextPage}
-          onClick={async () => {
-            await setPage((prevPage) => prevPage + 1);
-            await fetchNextPage();
-            await pagesCache.current.set(filter, page + 1);
-          }}
-        >
-          {isFetchingNextPage ? "Loading..." : "Load more"}
-        </button>
-      )}
+      <div className="load-more">
+        {hasNextPage && (
+          <button
+            className="load-more__button"
+            disabled={isFetchingNextPage}
+            onClick={async () => {
+              await setPage((prevPage) => prevPage + 1);
+              await fetchNextPage();
+              await pagesCache.current.set(filter, page + 1);
+            }}
+          >
+            {isFetchingNextPage ? "Loading..." : "Load more"}
+          </button>
+        )}
+      </div>
     </>
   );
 };
