@@ -10,9 +10,9 @@ const useItemSearch = async (
   });
   console.log(`Searching for ${filter}, page: ${page}`);
   console.log(data);
-  //console.log(data.numFound >= 100 * page ? page + 1 : undefined);
+  //console.log(data.numFound >= limit * page ? page + 1 : undefined);
   return {
-    nextPage: data.numFound >= 100 * page ? page + 1 : undefined,
+    nextPage: data.numFound >= limit * page ? page + 1 : undefined,
     data: data,
   };
 };
