@@ -1,4 +1,4 @@
-export interface Book {
+export type Book = {
   already_read_count: number;
   author_alternative_name: string[];
   author_facet: string[];
@@ -76,4 +76,4 @@ export interface Book {
   title_suggest: string;
   type: string;
   want_to_read_count: number;
-}
+};
