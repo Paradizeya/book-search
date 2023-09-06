@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const useItemSearch = async (
+const useItemsSearch = async (
   filter: string,
   page: number = 1,
   limit: number = 100
@@ -17,4 +17,4 @@ const useItemSearch = async (
   };
 };
 
-export default useItemSearch;
+export default useItemsSearch;

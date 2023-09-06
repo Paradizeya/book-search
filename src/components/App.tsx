@@ -1,7 +1,7 @@
 import { useState, FormEvent, useRef, useEffect } from "react";
 import Item from "./Item";
 import { Book } from "../types/types.module";
-import useItemSearch from "./useItemSearch";
+import useItemsSearch from "./useItemsSearch";
 import { useInfiniteQuery } from "react-query";
 
 const App = () => {
@@ -23,7 +23,7 @@ const App = () => {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useInfiniteQuery(filter, () => useItemSearch(filter, page, limit), {
+  } = useInfiniteQuery(filter, () => useItemsSearch(filter, page, limit), {
     enabled: false,
     getNextPageParam: (prevData) => prevData.nextPage,
     refetchOnWindowFocus: false,
