@@ -61,6 +61,11 @@ body {
         border-radius: 10px;
         &__title {
           font-size: 1.25rem;
+          font-weight: 700;
+        }
+        &__author {
+          font-size: 1rem;
+          font-weight: 500;
         }
         &__img {
           max-width: 200px;
@@ -76,6 +81,26 @@ body {
         @include button_interaction();
       }
     }
+  }
+
+  .toTheTop-button {
+    @include grid-center(fit-content);
+    border: none;
+    background-color: $black;
+    color: white;
+    cursor: pointer;
+    border-radius: 50%;
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    transition: 0.3s;
+    svg {
+      height: 40px;
+    }
+    // &:hover {
+    //   opacity: 1;
+    // }
+    @include button_interaction;
   }
 
   @media (min-width: 450px) {
