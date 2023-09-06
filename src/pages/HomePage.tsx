@@ -1,4 +1,4 @@
-import { useState, FormEvent, useRef, useEffect } from "react";
+import { useState, FormEvent, useEffect } from "react";
 import Item from "../components/Item";
 import ToTheTop from "../components/ToTheTop";
 import { Book } from "../types/types.module";
@@ -7,14 +7,17 @@ import { useInfiniteQuery } from "react-query";
 
 type Props = {
   pagesCache: React.MutableRefObject<Map<any, any>>;
+  queryCache: React.MutableRefObject<string>;
 };
 
 const testLimit = 1;
 
-const HomePage = ({ pagesCache }: Props) => {
+const HomePage = ({ pagesCache, queryCache }: Props) => {
   const [search, setSearch] = useState(""); //sort of a debouns
-  const [filter, setFilter] = useState(""); //query
-  const [page, setPage] = useState(1);
+  const [filter, setFilter] = useState(queryCache.current); //query
+  const [page, setPage] = useState(
+    pagesCache.current.get(filter) ? pagesCache.current.get(filter) : 1
+  );
   const [limit, setLimit] = useState(testLimit);
 
   useEffect(() => {
@@ -45,6 +48,7 @@ const HomePage = ({ pagesCache }: Props) => {
       await setPage(1);
     }
     await refetch({ refetchPage: (index) => index === page });
+    queryCache.current = search;
     setSearch("");
   };
 
@@ -105,7 +109,7 @@ const HomePage = ({ pagesCache }: Props) => {
             className="load-more__button"
             disabled={isFetchingNextPage}
             onClick={async () => {
-              await setPage((prevPage) => prevPage + 1);
+              await setPage((prevPage: any) => prevPage + 1);
               await fetchNextPage();
               await pagesCache.current.set(filter, page + 1);
             }}

@@ -5,10 +5,14 @@ import { useRef } from "react";
 
 const App = () => {
   let pagesCache = useRef(new Map());
+  let queryCache = useRef("");
   return (
     <>
       <Routes>
-        <Route path="/" element={<HomePage pagesCache={pagesCache} />} />
+        <Route
+          path="/"
+          element={<HomePage pagesCache={pagesCache} queryCache={queryCache} />}
+        />
         <Route path="/works/:workId" element={<ItemPage />} />
       </Routes>
     </>
