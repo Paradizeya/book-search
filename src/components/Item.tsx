@@ -10,10 +10,12 @@ type Props = {
 const Item = ({ id, title, cover_i, authors }: Props) => {
   return (
     <div className="item">
-      <h1 className="item__title">{title}</h1>
-      <h2 className="item__author">
-        Author: {authors ? authors.join(", ") : "unknown"}
-      </h2>
+      <div>
+        <h1 className="item__title">{title}</h1>
+        <h2 className="item__author">
+          Author: {authors ? authors.join(", ") : "unknown"}
+        </h2>
+      </div>
       <img
         src={
           cover_i ? `https://covers.openlibrary.org/b/id/${cover_i}-M.jpg` : ``

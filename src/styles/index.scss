@@ -19,6 +19,9 @@ body {
   );
   .root {
     width: 100%;
+  }
+  .home-page {
+    width: 100%;
     @include grid-center(90svh);
     align-items: start;
     grid-template-rows: repeat(2, minmax(0px, auto)) 1fr;
@@ -51,19 +54,22 @@ body {
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       .item {
         display: flex;
+        justify-content: space-between;
         padding: 10px;
         gap: 10px;
         flex-direction: column;
         align-items: center;
         //border: 1px solid burlywood;
         background-color: white;
-        box-shadow: 0 0 10px rgba(119, 119, 119, 0.322);
+        box-shadow: 0 0 10px rgba(238, 169, 169, 0.322);
         border-radius: 10px;
         &__title {
+          text-align: center;
           font-size: 1.25rem;
           font-weight: 700;
         }
         &__author {
+          text-align: center;
           font-size: 1rem;
           font-weight: 500;
         }

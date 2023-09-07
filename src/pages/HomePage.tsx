@@ -10,7 +10,7 @@ type Props = {
   queryCache: React.MutableRefObject<string>;
 };
 
-const testLimit = 1;
+const testLimit = 20;
 
 const HomePage = ({ pagesCache, queryCache }: Props) => {
   const [search, setSearch] = useState(""); //sort of a debouns
@@ -53,7 +53,7 @@ const HomePage = ({ pagesCache, queryCache }: Props) => {
   };
 
   return (
-    <>
+    <div className="home-page">
       <form className="search-form" onSubmit={handleSubmit}>
         <input
           className="search-form__input"
@@ -120,7 +120,7 @@ const HomePage = ({ pagesCache, queryCache }: Props) => {
       </div>
 
       <ToTheTop />
-    </>
+    </div>
   );
 };
 
