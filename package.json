@@ -1,6 +1,7 @@
 {
   "name": "react-games",
   "private": true,
+  "homepage": "https://paradizeya.github.io/book-search/",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
